@@ -10,6 +10,7 @@ export class BooksComponent {
   storeName = 'The Rockport Bookstore';
   numBooks = 0;
   shelf1: Bookshelf;
+  hideAdd: boolean = true;
 
   constructor() {
     this.shelf1 = new Bookshelf(new Book("Suzanne Collins", "The Hunger Games", [], []));
@@ -26,16 +27,22 @@ export class BooksComponent {
 
   }
   
-  newBook() {
-    this.shelf1.addBook(new Book("ryan", "test book", [], []))
+  newBook(title: string, author: string) {
+    this.shelf1.addBook(new Book(author, title, [], []))
     this.numBooks += 1;
-
+    this.hideAdd = !this.hideAdd;
   }
 
   borrow(book : Book) {
     book.borrowBook()
   }
+
+  toggleAdd() {
+    this.hideAdd = !this.hideAdd;
+  }
 }
+
+
 
 
 

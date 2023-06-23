@@ -20,6 +20,14 @@
             </button>
         </td>
     </tr>
-
 </table>
-<button (click)="newBook()">newBook</button>
+<div [hidden]="!hideAdd">
+<button (click)="toggleAdd()">Add book</button>
+</div>
+<div [hidden]="hideAdd">
+    <input type="text" #titleBox />
+    <input type="text" #authorBox />
+
+    <button (click)="newBook(titleBox.value, authorBox.value)">Add new book</button>
+</div> 
+<! need to clear after >
