@@ -3,12 +3,15 @@
 <p>Number of books: {{ numBooks }}</p>
 
 <p>The books are:</p>
-<table>
+<table [ngClass]="'books'">
     <tr>
         <th>Title</th>
         <th>Author</th>
         <th>Availability</th>
         <th>Borrow/Return</th>
+        <th>test B</th>
+        <th>test R</th>
+
     </tr>
     <tr *ngFor="let book of shelf1.contents">
         <td>{{ book.title }}</td>
@@ -19,6 +22,8 @@
                 {{ book.availability ? 'Borrow' : 'Return'}}
             </button>
         </td>
+        <td>{{ book.borrows[0] }}</td>
+        <td>{{ book.returns[0] }}</td>
     </tr>
 </table>
 <div [hidden]="!hideAdd">

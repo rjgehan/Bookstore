@@ -26,14 +26,14 @@ export class BooksComponent {
     this.numBooks += 1;
 
   }
-  
+
   newBook(title: string, author: string) {
     this.shelf1.addBook(new Book(author, title, [], []))
     this.numBooks += 1;
     this.hideAdd = !this.hideAdd;
   }
 
-  borrow(book : Book) {
+  borrow(book: Book) {
     book.borrowBook()
   }
 
@@ -50,33 +50,37 @@ class Book {
   author: string;
   title: string;
   availability: boolean;
-  borrows: Array<string>[];
-  returns: Array<string>[];
+  borrows: Array<string>;
+  returns: Array<string>;
   //cover
 
-  constructor(author : string, title : string, borrows : Array<string>[], returns : Array<string>[]) {
-      this.author = author; 
-      this.title = title;
-      this.availability = true;
-      this.borrows = borrows;
-      this.returns = returns;
+  constructor(author: string, title: string, borrows: Array<string>, returns: Array<string>) {
+    this.author = author;
+    this.title = title;
+    this.availability = true;
+    this.borrows = borrows;
+    this.returns = returns;
   }
 
   borrowBook() {
+    if (this.availability == true) {
+      this.borrows.push(Date())
+    }
+   
     this.availability = !this.availability;
   }
 }
 
 class Bookshelf {
-  contents : Array<Book>;
+  contents: Array<Book>;
 
-  constructor(first : Book) {
+  constructor(first: Book) {
     this.contents = [];
     this.contents.push(first)
   }
 
-  addBook(newBook : Book) : void {
-      this.contents.push(newBook)
+  addBook(newBook: Book): void {
+    this.contents.push(newBook)
   }
 
 }
