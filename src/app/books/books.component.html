@@ -6,11 +6,14 @@
   <p>The books are:</p>
   <table [ngClass]="'books'">
     <tr>
+      <th>Cover</th>
       <th>Title</th>
       <th>Author</th>
       <th>Borrow/Return</th>
     </tr>
     <tr *ngFor="let book of shelf1.contents">
+      <img [src]="book.cover" alt="" class="book-cover">
+
       <td>
         <a href="#" (click)="bookClick(book)">{{ book.title }}</a>
       </td>
@@ -26,15 +29,22 @@
     <button (click)="toggleAdd()">Add book</button>
   </div>
   <div [hidden]="hideAdd">
-    <input type="text" #titleBox />
-    <input type="text" #authorBox />
+    <input type="text" #titleBox placeholder="Title" />
+    <input type="text" #authorBox placeholder="Author" />
+    <p></p>
+    <textarea #descBox placeholder="Short Description (optional)"></textarea>
 
-    <button (click)="newBook(titleBox.value, authorBox.value)">Add new book</button>
+    <button (click)="newBook(titleBox.value, authorBox.value, titleBox, authorBox, descBox.value, descBox)">Add new book</button>
+    <div [hidden]="!errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
   </div>
 </div>
 
 <div [hidden]="!bookDisplay">
   <h1>{{displayBook.title}}</h1>
+  <img [src]="displayBook.cover" alt="" class="displayBook-cover">
+  <p>{{displayBook.description}}</p>
   <table [ngClass]="'books'">
     <tr>
       <th>Borrows</th>

@@ -1,3 +1,25 @@
 .books {
-    background-color:rgb(192, 192, 192);
+    background-color: rgb(192, 192, 192);
 }
+
+.book-cover {
+    width: 100px;
+    height: auto;
+}
+
+.displayBook-cover {
+    width: 150px;
+    height: auto;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+textarea {
+    resize: vertical;
+    height: 150px;
+    width: 350px;
+  }
+  

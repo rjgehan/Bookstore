@@ -13,31 +13,43 @@ export class BooksComponent {
   shelf1: Bookshelf;
   hideAdd: boolean = true;
   bookDisplay: boolean = false;
-  displayBook: Book = new Book(999, "placeHolder","placeHolder",[],[]);
+  errorMessage: string = '';
+  defaultDesc: string = "This book's description is coming soon.";
+  defaultCover: string = "../../assets/defaultImage.png";
+  displayBook: Book = new Book(999, "placeHolder", "placeHolder", [], [], this.defaultCover, this.defaultDesc);
 
   constructor(private http: HttpClient) {
     this.shelf1 = new Bookshelf();
 
     this.http.get('/api/books').subscribe((data: any) => {
       for (var i = 0; i < data.length; i++) {
-        this.shelf1.addBook(new Book(data[i].id, data[i].author, data[i].title, data[i].borrows, data[i].returns));
+        this.shelf1.addBook(new Book(data[i].id, data[i].author, data[i].title, data[i].borrows, data[i].returns, data[i].cover, data[i].description));
         this.numBooks += 1;
       }
     });
   }
 
-  newBook(title: string, author: string) {
-    const bookData = {
-      author: author,
-      title: title
-    };
+  newBook(title: string, author: string, titleBox: HTMLInputElement, authorBox: HTMLInputElement, description: string, descBox: HTMLTextAreaElement) {
+    if (!title || !author) {
+      this.errorMessage = 'error: Please provide both a title and an author.';
+    } else {
+      const bookData = {
+        author: author,
+        title: title
+      };
+      this.http.post('/api/books', bookData).subscribe((data: any) => { });
+      this.numBooks += 1;
+      this.shelf1.addBook(new Book(this.numBooks - 1, author, title, [], [], this.defaultCover, !description ? this.defaultDesc : description));
 
-    this.http.post('/api/books', bookData).subscribe((data: any) => { });
-    this.numBooks += 1;
-    this.shelf1.addBook(new Book(this.numBooks - 1, author, title, [], []));
 
-    this.hideAdd = !this.hideAdd;
+  
+      this.hideAdd = !this.hideAdd;
+      titleBox.value = '';
+      authorBox.value = '';
+      descBox.value = '';
+    }
   }
+  
 
   borrow(book: Book) {
     book.borrowBook()
@@ -80,15 +92,18 @@ class Book {
   availability: boolean;
   borrows: Array<string>;
   returns: Array<string>;
-  //cover
+  cover: string;
+  description: string;
 
-  constructor(id: number, author: string, title: string, borrows: Array<string>, returns: Array<string>) {
+  constructor(id: number, author: string, title: string, borrows: Array<string>, returns: Array<string>, cover: string, description: string) {
     this.id = id;
     this.author = author;
     this.title = title;
     this.availability = true;
     this.borrows = borrows;
     this.returns = returns;
+    this.cover = cover;
+    this.description = description;
   }
 
   borrowBook() {
@@ -112,5 +127,4 @@ class Bookshelf {
   addBook(newBook: Book): void {
     this.contents.push(newBook);
   }
-
 }

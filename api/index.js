@@ -27,6 +27,8 @@ app.post("/api/books", (req, res) => {
     title: req.body.title,
     borrows: [],
     returns: [],
+    cover: "../../assets/defaultImage.png",
+    description: "This book's description is coming soon."
   };
   books.push(book);
   fs.writeFileSync("dataBase.json", JSON.stringify(books, null, 2));
