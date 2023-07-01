@@ -1,35 +1,15 @@
 const express = require("express");
+const fs = require("fs");
 const app = express();
 
 app.use(express.json());
 
-const books = [
-  {
-    id: 0,
-    author: "Suzanne Collins",
-    title: "The Hunger Games",
-    borrows: [],
-    returns: [],
-  },
-  {
-    id: 1,
-    author: "James Dashner",
-    title: "The Maze Runner",
-    borrows: [],
-    returns: [],
-  },
-  {
-    id: 2,
-    author: "F. Scott Fitzgerald",
-    title: "The Great Gatsby",
-    borrows: [],
-    returns: [],
-  },
-];
-
-app.get("/", (req, res) => {
-  res.send("test bookstore API");
-});
+let books = [];
+try {
+  const dataFile = fs.readFileSync("dataBase.json");
+  books = JSON.parse(dataFile);
+} catch (err) {
+}
 
 app.get("/api/books", (req, res) => {
   res.send(books);
@@ -49,26 +29,49 @@ app.post("/api/books", (req, res) => {
     returns: [],
   };
   books.push(book);
+  fs.writeFileSync("dataBase.json", JSON.stringify(books, null, 2));
   res.send(book);
 });
 
 app.put("/api/books/return/:id", (req, res) => {
   const book = books.find((c) => c.id === parseInt(req.params.id));
   book.returns.push(req.body.date);
+
+  const updatedData = books.map((b) => {
+    if (b.id === book.id) {
+      return book;
+    }
+    return b;
+  });
+  fs.writeFileSync("dataBase.json", JSON.stringify(updatedData, null, 2));
+
   res.send(book);
 });
 
 app.put("/api/books/borrow/:id", (req, res) => {
   const book = books.find((c) => c.id === parseInt(req.params.id));
   book.borrows.push(req.body.date);
+
+  const updatedData = books.map((b) => {
+    if (b.id === book.id) {
+      return book;
+    }
+    return b;
+  });
+  fs.writeFileSync("dataBase.json", JSON.stringify(updatedData, null, 2));
+
   res.send(book);
 });
 
 
 app.delete("/api/books/:id", (req, res) => {
   const book = books.find((c) => c.id === parseInt(req.params.id));
-  const index = books.indexOf(book)
-  books.splice(index, 1)
+  const index = books.indexOf(book);
+  books.splice(index, 1);
+
+  const updatedData = books.filter((b) => b.id !== book.id);
+  fs.writeFileSync("dataBase.json", JSON.stringify(updatedData, null, 2));
+
   res.send(book)
 });
 

@@ -1,0 +1,27 @@
+[
+  {
+    "id": 0,
+    "author": "Suzanne Collins",
+    "title": "The Hunger Games",
+    "borrows": [
+      "Sat Jul 01 2023 15:59:37 GMT-0400 (Eastern Daylight Time)"
+    ],
+    "returns": [
+      "Sat Jul 01 2023 15:59:33 GMT-0400 (Eastern Daylight Time)"
+    ]
+  },
+  {
+    "id": 1,
+    "author": "James Dashner",
+    "title": "The Maze Runner",
+    "borrows": [],
+    "returns": []
+  },
+  {
+    "id": 2,
+    "author": "F. Scott Fitzgerald",
+    "title": "The Great Gatsby",
+    "borrows": [],
+    "returns": []
+  }
+]
