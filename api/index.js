@@ -54,13 +54,16 @@ app.post("/api/books", (req, res) => {
 
 app.put("/api/books/return/:id", (req, res) => {
   const book = books.find((c) => c.id === parseInt(req.params.id));
-  book.returns.push(req.body.date)
+  book.returns.push(req.body.date);
+  res.send(book);
 });
 
 app.put("/api/books/borrow/:id", (req, res) => {
   const book = books.find((c) => c.id === parseInt(req.params.id));
-  book.borrows.push(req.body.date)
+  book.borrows.push(req.body.date);
+  res.send(book);
 });
+
 
 app.delete("/api/books/:id", (req, res) => {
   const book = books.find((c) => c.id === parseInt(req.params.id));

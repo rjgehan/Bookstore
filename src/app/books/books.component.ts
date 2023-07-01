@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-books',
@@ -11,42 +12,69 @@ export class BooksComponent {
   numBooks = 0;
   shelf1: Bookshelf;
   hideAdd: boolean = true;
+  bookDisplay: boolean = false;
+  displayBook: Book = new Book(999, "placeHolder","placeHolder",[],[]);
 
-  constructor() {
-    this.shelf1 = new Bookshelf(new Book("Suzanne Collins", "The Hunger Games", [], []));
-    this.numBooks += 1;
-    this.addBooksToShelf();
-  }
+  constructor(private http: HttpClient) {
+    this.shelf1 = new Bookshelf();
 
-  addBooksToShelf() {
-    this.shelf1.addBook(new Book("James Dashner", "The Maze Runner", [], []));
-    this.numBooks += 1;
-
-    this.shelf1.addBook(new Book("F. Scott Fitzgerald", "The Great Gatsby", [], []));
-    this.numBooks += 1;
-
+    this.http.get('/api/books').subscribe((data: any) => {
+      for (var i = 0; i < data.length; i++) {
+        this.shelf1.addBook(new Book(data[i].id, data[i].author, data[i].title, data[i].borrows, data[i].returns));
+        this.numBooks += 1;
+      }
+    });
   }
 
   newBook(title: string, author: string) {
-    this.shelf1.addBook(new Book(author, title, [], []))
+    const bookData = {
+      author: author,
+      title: title
+    };
+
+    this.http.post('/api/books', bookData).subscribe((data: any) => { });
     this.numBooks += 1;
+    this.shelf1.addBook(new Book(this.numBooks - 1, author, title, [], []));
+
     this.hideAdd = !this.hideAdd;
   }
 
   borrow(book: Book) {
     book.borrowBook()
+    const bookData = {
+      date: Date()
+    };
+
+    if (book.availability == true) {
+      this.http.put('/api/books/borrow/' + book.id, bookData).subscribe((data: any) => {
+      });
+    } else {
+      this.http.put('/api/books/return/' + book.id, bookData).subscribe((data: any) => {
+      });
+    }
   }
 
   toggleAdd() {
     this.hideAdd = !this.hideAdd;
   }
+
+  bookClick(book: Book) {
+    this.bookDisplay = !this.bookDisplay;
+    this.displayBook = book;
+  }
+  delBook(book: Book) {
+    this.shelf1.contents.splice(this.shelf1.contents.indexOf(book), 1);
+    this.http.delete('/api/books/' + book.id).subscribe((data: any) => {
+    });
+    this.bookDisplay = !this.bookDisplay;
+    this.numBooks -= 1;
+  }
+
 }
 
 
-
-
-
 class Book {
+  id: number;
   author: string;
   title: string;
   availability: boolean;
@@ -54,7 +82,8 @@ class Book {
   returns: Array<string>;
   //cover
 
-  constructor(author: string, title: string, borrows: Array<string>, returns: Array<string>) {
+  constructor(id: number, author: string, title: string, borrows: Array<string>, returns: Array<string>) {
+    this.id = id;
     this.author = author;
     this.title = title;
     this.availability = true;
@@ -64,9 +93,11 @@ class Book {
 
   borrowBook() {
     if (this.availability == true) {
-      this.borrows.push(Date())
+      this.borrows.push(Date());
+    } else {
+      this.returns.push(Date());
     }
-   
+
     this.availability = !this.availability;
   }
 }
@@ -74,13 +105,12 @@ class Book {
 class Bookshelf {
   contents: Array<Book>;
 
-  constructor(first: Book) {
+  constructor() {
     this.contents = [];
-    this.contents.push(first)
   }
 
   addBook(newBook: Book): void {
-    this.contents.push(newBook)
+    this.contents.push(newBook);
   }
 
 }

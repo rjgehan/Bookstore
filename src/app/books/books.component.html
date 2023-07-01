@@ -1,38 +1,54 @@
-<h1>Welcome to {{ storeName }}</h1>
+<div [hidden]="bookDisplay">
+  <h1>Welcome to {{ storeName }}</h1>
 
-<p>Number of books: {{ numBooks }}</p>
+  <p>Number of books: {{ numBooks }}</p>
 
-<p>The books are:</p>
-<table [ngClass]="'books'">
+  <p>The books are:</p>
+  <table [ngClass]="'books'">
     <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Availability</th>
-        <th>Borrow/Return</th>
-        <th>test B</th>
-        <th>test R</th>
-
+      <th>Title</th>
+      <th>Author</th>
+      <th>Borrow/Return</th>
     </tr>
     <tr *ngFor="let book of shelf1.contents">
-        <td>{{ book.title }}</td>
-        <td>{{ book.author }}</td>
-        <td>{{book.availability}}</td>
-        <td>
-            <button (click)="book.availability? borrow(book) : borrow(book)">
-                {{ book.availability ? 'Borrow' : 'Return'}}
-            </button>
-        </td>
-        <td>{{ book.borrows[0] }}</td>
-        <td>{{ book.returns[0] }}</td>
+      <td>
+        <a href="#" (click)="bookClick(book)">{{ book.title }}</a>
+      </td>
+      <td>{{ book.author }}</td>
+      <td>
+        <button (click)="borrow(book)">
+          {{ book.availability ? 'Borrow' : 'Return' }}
+        </button>
+      </td>
     </tr>
-</table>
-<div [hidden]="!hideAdd">
-<button (click)="toggleAdd()">Add book</button>
-</div>
-<div [hidden]="hideAdd">
+  </table>
+  <div [hidden]="!hideAdd">
+    <button (click)="toggleAdd()">Add book</button>
+  </div>
+  <div [hidden]="hideAdd">
     <input type="text" #titleBox />
     <input type="text" #authorBox />
 
     <button (click)="newBook(titleBox.value, authorBox.value)">Add new book</button>
-</div> 
-<! need to clear after >
+  </div>
+</div>
+
+<div [hidden]="!bookDisplay">
+  <h1>{{displayBook.title}}</h1>
+  <table [ngClass]="'books'">
+    <tr>
+      <th>Borrows</th>
+      <th>Returns</th>
+    </tr>
+    <tr>
+      <td>
+        <li *ngFor="let borrowDate of displayBook.borrows">{{ borrowDate }}</li>
+      </td>
+      <td>
+        <li *ngFor="let returnDate of displayBook.returns">{{ returnDate }}</li>
+      </td>
+    </tr>
+  </table>
+  <button (click)="delBook(displayBook)">Delete</button>
+  <button (click)="bookClick(displayBook)">Back</button>
+</div>

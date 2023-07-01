@@ -63,7 +63,8 @@
               "browserTarget": "BookStore:build:production"
             },
             "development": {
-              "browserTarget": "BookStore:build:development"
+              "browserTarget": "BookStore:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
