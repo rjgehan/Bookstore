@@ -1,0 +1,66 @@
+<div [hidden]="bookDisplay">
+
+  <table [ngClass]="'books'">
+    <thead>
+      <tr>
+        <th>Cover</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Borrow/Return</th>
+      </tr>
+    </thead>
+    <tbody [ngClass]="'booksInfo'">
+      <tr *ngFor="let book of shelf1.contents">
+        <img [src]="book.cover" alt="" class="book-cover">
+
+        <td>
+          <a href="#" (click)="bookClick(book)">{{ book.title }}</a>
+        </td>
+        <td>{{ book.author }}</td>
+        <td>
+          <button (click)="borrow(book)">
+            {{ book.availability ? 'Borrow' : 'Return' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div [hidden]="!hideAdd">
+    <button class="button" (click)="toggleAdd()">Add book</button>
+  </div>
+  <div [hidden]="hideAdd">
+    <input type="text" #titleBox placeholder="Title" />
+    <input type="text" #authorBox placeholder="Author" />
+    <p></p>
+    <textarea #descBox placeholder="Short Description (optional)"></textarea>
+
+    <button class="button" (click)="newBook(titleBox.value, authorBox.value, titleBox, authorBox, descBox.value, descBox)">Add new
+      book</button>
+    <div [hidden]="!errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>
+
+<div class = 'page2' [hidden]="!bookDisplay">
+  <h1 [ngClass]="'desc'">{{displayBook.title}}</h1>
+  <img [src]="displayBook.cover" alt="" class="displayBook-cover">
+  <p [ngClass]="'desc'">{{displayBook.description}}</p>
+  <table [ngClass]="'books'">
+    <tr>
+      <th>Borrows</th>
+      <th>Returns</th>
+    </tr>
+    <tr>
+      <td>
+        <li *ngFor="let borrowDate of displayBook.borrows">{{ borrowDate }}</li>
+      </td>
+      <td>
+        <li *ngFor="let returnDate of displayBook.returns">{{ returnDate }}</li>
+      </td>
+    </tr>
+  </table>
+  <button class="button" (click)="delBook(displayBook)">Delete</button>
+  <button class="button" (click)="bookClick(displayBook)">Back</button>
+
+</div>

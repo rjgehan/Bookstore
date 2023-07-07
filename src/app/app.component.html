@@ -1,0 +1,35 @@
+<img src="../assets/logo Background.png" alt="" class="cover-banner">
+
+<body>
+    <nav class="nav">
+        <a href="#" (click)="home()">Home</a>
+        <a href="#" (click)="books()">Books</a>
+        <a href="https://www.therockportgroup.com/" target="_blank">Rockport</a>
+        <a href="https://www.therockportgroup.com/about/the-rockport-story?" target="_blank">About Us</a>
+    </nav>
+</body>
+
+<div class="wrapper">
+
+    <div *ngIf="currPage == 'home'">
+        <app-home></app-home>
+    </div>
+    <div *ngIf="currPage == 'books'">
+        <app-books></app-books>
+    </div>
+</div>
+
+
+<footer class="background">
+    <div class="container">
+        <p>© 2023 Rockport. All rights reserved.</p>
+        <nav>
+            <ul>
+                <li><a href="https://www.linkedin.com/company/rockport" target="_blank">LinkedIn</a></li>
+                <li><a href="https://www.facebook.com/rockportcre" target="_blank">Facebook</a></li>
+                <li><a href="https://www.instagram.com/rockport.cre/" target="_blank">Twitter</a></li>
+                <li><a href="https://www.instagram.com/rockport.cre/" target="_blank">Instagram</a></li>
+            </ul>
+        </nav>
+    </div>
+</footer>
